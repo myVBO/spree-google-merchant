@@ -35,7 +35,7 @@ module Spree
       # Taken from github.com/romul/spree-solr-search
       # app/models/spree/product_decorator.rb
       #
-      pp = Spree::ProductProperty.joins(:property).where(
+      pp = Spree::ProductProperty.joins(:property).where({
           :product_id => self.id,
           :spree_properties => {:name => name}
         }
