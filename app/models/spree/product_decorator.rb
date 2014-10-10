@@ -1,15 +1,15 @@
 module Spree
   Product.class_eval do
     scope :google_base_scope, includes(:taxons, {:master => :images})
-    
+
     def google_base_description
       description
     end
-    
+
     def google_base_condition
       'new'
     end
-    
+
     def google_base_availability
       'in stock'
     end
@@ -17,31 +17,34 @@ module Spree
     def google_base_image_size
       :large
     end
-    
+
     def google_base_gtin
-      find_property('GTIN')
+      find_property('GTIN') || find_property("UPC") || find_property("UPC #")
     end
-    
+
     def google_base_brand
-      (Spree::Taxon.brands.to_a & taxons.to_a).first.try(:name) || find_property('brand') || Spree::Config.site_name
+      Spree::Config.site_name
     end
-    
+
+    def google_base_product_category
+#      ""
+      "Home & Garden > Household Appliances > Climate Control Appliances > Air Purifiers"
+    end
+
     def find_property(name)
       # Taken from github.com/romul/spree-solr-search
       # app/models/spree/product_decorator.rb
       #
-      pp = Spree::ProductProperty.first(
-        :joins => :property, 
-        :conditions => {
+      pp = Spree::ProductProperty.joins(:property).where(
           :product_id => self.id,
           :spree_properties => {:name => name}
         }
-      )
+      ).first
 
-      pp ? pp.value : nil      
+      pp && !pp.value.blank? ? pp.value : nil
     end
-    
-      
+
+
 
     def google_base_product_type
       return google_base_taxon_type unless Spree::GoogleBase::Config[:enable_taxon_mapping]
