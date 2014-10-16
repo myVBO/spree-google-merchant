@@ -18,6 +18,14 @@ module Spree
       :large
     end
 
+    def google_base_shipping
+      'ground'
+    end
+
+    def google_base_tax
+      '0'
+    end
+
     def google_base_gtin
       find_property('GTIN') || find_property("UPC") || find_property("UPC #")
     end
@@ -27,8 +35,7 @@ module Spree
     end
 
     def google_base_product_category
-#      ""
-      "Home & Garden > Household Appliances > Climate Control Appliances > Air Purifiers"
+      return google_base_taxon_type
     end
 
     def find_property(name)
