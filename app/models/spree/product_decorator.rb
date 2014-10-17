@@ -35,7 +35,9 @@ module Spree
     end
 
     def google_base_product_category
-      return google_base_taxon_type
+      return unless taxons.any?
+
+      taxons[0].self_and_ancestors.map(&:name).join(" > ")
     end
 
     def find_property(name)
