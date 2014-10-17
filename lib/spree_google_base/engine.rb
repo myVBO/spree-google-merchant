@@ -17,6 +17,7 @@ module SpreeGoogleBase
         ['g:price', 'price'],
         ['g:shipping_weight', 'weight'],
         ['g:condition', 'google_base_condition'],
+        ['g:google_product_category', 'google_base_product_category'],
         ['g:product_type', 'google_base_product_type'],
         ['g:brand', 'google_base_brand'],
         ['g:quantity','total_on_hand'],
