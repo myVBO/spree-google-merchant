@@ -20,11 +20,17 @@ module SpreeGoogleBase
       end
     end
 
+    def self.generate_xml
+      output = ""
+      self.builders.first.generate_xml output
+      output
+    end
+
     def initialize(opts = {})
       raise "Please pass a public address as the second argument, or configure :public_path in Spree::GoogleBase::Config" unless
         opts[:store].present? or (opts[:path].present? or Spree::GoogleBase::Config[:public_domain])
 
-      @store = opts[:store] if opts[:store].present?
+      @store = nil#opts[:store] if opts[:store].present?
       @title = @store ? @store.name : Spree::GoogleBase::Config[:store_name]
 
       @domain = @store ? @store.domains.match(/[\w\.]+/).to_s : opts[:path]
@@ -113,7 +119,6 @@ module SpreeGoogleBase
 
     def image_url product, image
       base_url = image.attachment.url(product.google_base_image_size)
-      base_url = "#{domain}/#{base_url}"# unless Spree::Config[:use_s3]
 
       base_url
     end
