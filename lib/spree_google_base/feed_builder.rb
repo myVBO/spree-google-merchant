@@ -119,8 +119,12 @@ module SpreeGoogleBase
 
     def image_url product, image
       base_url = image.attachment.url(product.google_base_image_size)
+      base_url = "#{domain}/#{base_url}" unless !(defined? Paperclip).nil? && Paperclip::Attachment.default_options[:storage].eql?(:s3)
 
-      base_url
+      # Google doesn't like image urls without an http/https
+      if !base_url.include? "http"
+        base_url = "#{domain.split(':').first}:#{base_url}"
+      end
     end
 
     def build_meta(xml)
